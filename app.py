@@ -314,6 +314,23 @@ def main():
     try:
         with st.spinner("🔍 Analyzing image..."):
             analysis = analyze_scene(temp_image_path, model, conf=conf)
+            
+            # Validation: Check if any workers were detected
+            if analysis["workers_detected"] == 0:
+                st.error("""
+                    ❌ **No Workers Detected**
+                    
+                    The uploaded image does not appear to be a construction site image with workers.
+                    
+                    Please ensure:
+                    • The image contains people/workers
+                    • The image is from a construction or industrial site
+                    • The image quality is sufficient for detection
+                    
+                    Try uploading a different image.
+                """)
+                return
+            
             annotated = create_annotated_image(temp_image_path, analysis)
 
         # Main content layout
